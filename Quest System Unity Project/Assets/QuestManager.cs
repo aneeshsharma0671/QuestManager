@@ -31,19 +31,38 @@ public class QuestManager : MonoBehaviour
         {
             case ConditionType.HealthGreaterThan :
             case ConditionType.HealthLessThan:
-                PlayerData.Instance.OnPlayerHealthChange += quest.checkQuest;
-                quest.OnSuccess += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.checkQuest; RemoveQuest(quest.QuestID); };
-                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.checkQuest; RemoveQuest(quest.QuestID); };
+                PlayerData.Instance.OnPlayerHealthChange += quest.CheckSuccess;
+                quest.OnSuccess += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; RemoveQuest(quest.QuestID); };
+                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; RemoveQuest(quest.QuestID); };
                 break;
             case ConditionType.EnemiesKilled:
-                PlayerData.Instance.OnEnemiesKilled += quest.checkQuest;
-                quest.OnSuccess += () => { PlayerData.Instance.OnEnemiesKilled -= quest.checkQuest; RemoveQuest(quest.QuestID); };
-                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.checkQuest; RemoveQuest(quest.QuestID); };
+                PlayerData.Instance.OnEnemiesKilled += quest.CheckSuccess;
+                quest.OnSuccess += () => { PlayerData.Instance.OnEnemiesKilled -= quest.CheckSuccess; RemoveQuest(quest.QuestID); };
+                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; RemoveQuest(quest.QuestID); };
                 break;
             case ConditionType.ResourcesCollected:
-                PlayerData.Instance.OnResourcesCollected += quest.checkQuest;
-                quest.OnSuccess += () => { PlayerData.Instance.OnResourcesCollected -= quest.checkQuest; RemoveQuest(quest.QuestID); };
-                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.checkQuest; RemoveQuest(quest.QuestID); };
+                PlayerData.Instance.OnResourcesCollected += quest.CheckSuccess;
+                quest.OnSuccess += () => { PlayerData.Instance.OnResourcesCollected -= quest.CheckSuccess; RemoveQuest(quest.QuestID); };
+                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; RemoveQuest(quest.QuestID); };
+                break;
+        }
+        switch (quest.FailCondition.conditionType)
+        {
+            case ConditionType.HealthGreaterThan:
+            case ConditionType.HealthLessThan:
+                PlayerData.Instance.OnPlayerHealthChange += quest.CheckFail;
+                quest.OnSuccess += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; RemoveQuest(quest.QuestID); };
+                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; RemoveQuest(quest.QuestID); };
+                break;
+            case ConditionType.EnemiesKilled:
+                PlayerData.Instance.OnEnemiesKilled += quest.CheckFail;
+                quest.OnSuccess += () => { PlayerData.Instance.OnEnemiesKilled -= quest.CheckFail; RemoveQuest(quest.QuestID); };
+                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; RemoveQuest(quest.QuestID); };
+                break;
+            case ConditionType.ResourcesCollected:
+                PlayerData.Instance.OnResourcesCollected += quest.CheckFail;
+                quest.OnSuccess += () => { PlayerData.Instance.OnResourcesCollected -= quest.CheckFail; RemoveQuest(quest.QuestID); };
+                quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; RemoveQuest(quest.QuestID); };
                 break;
         }
     }
@@ -56,7 +75,7 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Quest Not Found " + questID);
+            //Debug.Log("Quest Not Found " + questID);
         }
     }
     public void ShowQuests()
@@ -92,66 +111,33 @@ public class Quest
     public QuestCondtion FailCondition { get; set; }
     public Action OnFail { get; set; }
 
-    public void checkQuest(int currentCount)
+    public void CheckSuccess(int currentValue)
     {
-        Debug.Log("Checking Quest " + QuestID);
-        switch (SuccessCondition.conditionType)
-        { 
-            case ConditionType.HealthGreaterThan:
-                if (currentCount > SuccessCondition.conditionValue)
-                {
-                    OnSuccess();
-                }
-                break;
-            case ConditionType.HealthLessThan:
-                if (currentCount < SuccessCondition.conditionValue)
-                {
-                    OnSuccess();
-                }
-                break;
-            case ConditionType.EnemiesKilled:
-                if (currentCount > SuccessCondition.conditionValue)
-                {
-                    OnSuccess();
-                }
-                break;
-            case ConditionType.ResourcesCollected:
-                if (currentCount > SuccessCondition.conditionValue)
-                {
-                    OnSuccess();
-                }
-                break;
-            default:
-                break;
+        if (checkQuest(SuccessCondition,currentValue))
+        {
+            OnSuccess();
         }
-        switch (FailCondition.conditionType)
+    }
+    public void CheckFail(int currentValue)
+    {
+        if (checkQuest(FailCondition,currentValue))
+        {
+            OnFail();
+        }
+    }
+    bool checkQuest(QuestCondtion condition,int currentValue)
+    {
+        switch (condition.conditionType)
         {
             case ConditionType.HealthGreaterThan:
-                if (currentCount > FailCondition.conditionValue)
-                {
-                    OnFail();
-                }
-                break;
+                return currentValue > condition.conditionValue;
             case ConditionType.HealthLessThan:
-                if (currentCount < FailCondition.conditionValue)
-                {
-                    OnFail();
-                }
-                break;
+                return currentValue < condition.conditionValue;
             case ConditionType.EnemiesKilled:
-                if (currentCount > FailCondition.conditionValue)
-                {
-                    OnFail();
-                }
-                break;
+                return currentValue > condition.conditionValue;
             case ConditionType.ResourcesCollected:
-                if (currentCount > FailCondition.conditionValue)
-                {
-                    OnFail();
-                }
-                break;
-            default:
-                break;
+                return currentValue > condition.conditionValue;
         }
+        return false;
     }
 }
