@@ -438,7 +438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0571605af3b6a924a99e74620535f33a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questID: 0
+  questIDToDelete: 0
+  QuestDescription: HealthFull
   successCondition:
     conditionType: 0
     conditionValue: 100
