@@ -87,7 +87,56 @@ public class QuestManager : MonoBehaviour
         }
     }
 }
+// public class HealthCondition : QuestCondtion
+// {
+//     public override void BindPassCondition(Quest quest)
+//     {
+//         PlayerData.Instance.OnPlayerHealthChange += quest.CheckSuccess;
+//         quest.OnSuccess += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//         quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//     }
 
+//     public override void BindFailCondition(Quest quest)
+//     {
+//         PlayerData.Instance.OnPlayerHealthChange += quest.CheckFail;
+//         quest.OnSuccess += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//         quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//     }
+// }
+
+// public class EnemiesKilledCondition : QuestCondtion
+// {
+//     public override void BindPassCondition(Quest quest)
+//     {
+//         PlayerData.Instance.OnEnemiesKilled += quest.CheckSuccess;
+//         quest.OnSuccess += () => { PlayerData.Instance.OnEnemiesKilled -= quest.CheckSuccess; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//         quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//     }
+
+//     public override void BindFailCondition(Quest quest)
+//     {
+//         PlayerData.Instance.OnEnemiesKilled += quest.CheckFail;
+//         quest.OnSuccess += () => { PlayerData.Instance.OnEnemiesKilled -= quest.CheckFail; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//         quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//     }
+// }
+
+// public class ResourcesCollectedCondition : QuestCondtion
+// {
+//     public override void BindPassCondition(Quest quest)
+//     {
+//         PlayerData.Instance.OnResourcesCollected += quest.CheckSuccess;
+//         quest.OnSuccess += () => { PlayerData.Instance.OnResourcesCollected -= quest.CheckSuccess; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//         quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckSuccess; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//     }
+
+//     public override void BindFailCondition(Quest quest)
+//     {
+//         PlayerData.Instance.OnResourcesCollected += quest.CheckFail;
+//         quest.OnSuccess += () => { PlayerData.Instance.OnResourcesCollected -= quest.CheckFail; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//         quest.OnFail += () => { PlayerData.Instance.OnPlayerHealthChange -= quest.CheckFail; QuestManager.Instance.RemoveQuest(quest.QuestID); };
+//     }
+// }
 public enum ConditionType
 {
     HealthGreaterThan,
